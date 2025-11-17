@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # Nginx reverse proxy (dùng image có sẵn, không cần build)
+  nginx:
+    image: nginx:alpine
+    container_name: qlts-nginx
+    ports:
+      - "80:80"
+    volumes:
+      # Mount file cấu hình Nginx
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      # Uncomment nếu muốn Nginx serve static files trực tiếp
+      # - ./static:/usr/share/nginx/html/static:ro
+    depends_on:
+      - web
+    restart: unless-stopped
+    networks:
+      - qlts-network
+
+  # Flask application
+  web:
+    build: .
+    container_name: qlts-web
+    environment:
+      - DATABASE_URL=postgresql://qlts_user:qlts_password@db:5432/qlts_db
+      - SECRET_KEY=your-secret-key-change-in-production
+      - FLASK_DEBUG=False
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=admin123
+      - ADMIN_EMAIL=admin@example.com
+      - HOST=0.0.0.0
+      - PORT=5000
+    depends_on:
+      - db
+    volumes:
+      # Mount instance để persist SQLite nếu dùng SQLite
+      - ./instance:/app/instance
+    restart: unless-stopped
+    networks:
+      - qlts-network
+    # Không expose port ra ngoài, chỉ Nginx kết nối
+
+  # PostgreSQL database
+  db:
+    image: postgres:15-alpine
+    container_name: qlts-db
+    environment:
+      - POSTGRES_USER=qlts_user
+      - POSTGRES_PASSWORD=qlts_password
+      - POSTGRES_DB=qlts_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - qlts-network
+    # Không expose port ra ngoài, chỉ các service trong network kết nối
+
+networks:
+  qlts-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

@@ -1,0 +1,369 @@
+{% extends "layouts/base.html" %}
+
+{% block page_title %}Danh sách loại tài sản{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('index') }}">Tổng quan</a></li>
+<li class="breadcrumb-item active">Loại tài sản</li>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Danh sách loại tài sản</h3>
+        <div class="card-tools">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#assetTypeModal"
+                onclick="openAddModal()">
+                <i class="fas fa-plus"></i> Thêm loại tài sản
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <!-- Filter -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <form method="GET" class="form-inline">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="search" placeholder="Tìm kiếm theo tên..."
+                            value="{{ search }}">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                            {% if search %}
+                            <a href="{{ url_for('asset_types') }}" class="btn btn-outline-danger">
+                                <i class="fas fa-times"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6 text-right">
+                <small class="text-muted">
+                    Hiển thị {{ asset_types.items|length }} / {{ asset_types.total }} kết quả
+                </small>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped" id="assetTypesTable">
+                <thead>
+                    <tr>
+                        <th width="5%">STT</th>
+                        <th width="5%">ID</th>
+                        <th width="20%">Tên loại tài sản</th>
+                        <th width="35%">Mô tả</th>
+                        <th width="10%">Số tài sản</th>
+                        <th width="15%">Ngày tạo</th>
+                        <th width="10%">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for asset_type in asset_types.items %}
+                    <tr>
+                        <td>{{ loop.index + ((asset_types.page-1) * asset_types.per_page) }}</td>
+                        <td>{{ asset_type.id }}</td>
+                        <td>{{ asset_type.name }}</td>
+                        <td>{{ asset_type.description[:100] }}{% if asset_type.description|length > 100 %}...{% endif %}
+                        </td>
+                        <td>
+                            <span class="badge badge-info">{{ asset_type.assets|length }}</span>
+                        </td>
+                        <td>{{ asset_type.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                        <td class="actions">
+                            <a href="{{ url_for('edit_asset_type', id=asset_type.id) }}" class="btn btn-sm btn-warning" title="Sửa">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button class="btn btn-sm btn-danger btn-delete-asset-type" 
+                                    data-id="{{ asset_type.id }}" 
+                                    data-name="{{ asset_type.name }}" 
+                                    title="Xóa">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if asset_types.pages > 1 %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if asset_types.has_prev %}
+                <li class="page-item">
+                    <a class="page-link"
+                        href="{{ url_for('asset_types', page=asset_types.prev_num, search=search) }}">Trước</a>
+                </li>
+                {% endif %}
+
+                {% for page_num in asset_types.iter_pages() %}
+                {% if page_num %}
+                {% if page_num != asset_types.page %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('asset_types', page=page_num, search=search) }}">{{ page_num
+                        }}</a>
+                </li>
+                {% else %}
+                <li class="page-item active">
+                    <span class="page-link">{{ page_num }}</span>
+                </li>
+                {% endif %}
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+                {% endif %}
+                {% endfor %}
+
+                {% if asset_types.has_next %}
+                <li class="page-item">
+                    <a class="page-link"
+                        href="{{ url_for('asset_types', page=asset_types.next_num, search=search) }}">Sau</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+
+        {% if not asset_types.items %}
+        <div class="text-center py-4">
+            <i class="fas fa-tags fa-3x text-muted mb-3"></i>
+            <p class="text-muted">Không tìm thấy loại tài sản nào.</p>
+            {% if search %}
+            <a href="{{ url_for('asset_types') }}" class="btn btn-primary">Xem tất cả</a>
+            {% else %}
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#assetTypeModal"
+                onclick="openAddModal()">
+                Thêm loại tài sản đầu tiên
+            </button>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal Add/Edit -->
+<div class="modal fade" id="assetTypeModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Thêm loại tài sản</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <form id="assetTypeForm" onsubmit="return false;">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="assetTypeName">Tên loại tài sản <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="assetTypeName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="assetTypeDescription">Mô tả</label>
+                        <textarea class="form-control" id="assetTypeDescription" name="description" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" id="submitBtn" onclick="submitForm()">
+                        <i class="fas fa-save"></i> Lưu
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Đảm bảo tất cả functions được định nghĩa trước khi sử dụng
+    console.log('Loading asset types JavaScript...');
+
+    // Global variables
+    let currentEditId = null;
+
+    // Function để mở modal thêm
+    function openAddModal() {
+        console.log('openAddModal called');
+        currentEditId = null;
+        $('#assetTypeModal').modal('show');
+        $('#modalTitle').text('Thêm loại tài sản');
+        $('#submitBtn').html('<i class="fas fa-save"></i> Lưu');
+        document.getElementById('assetTypeForm').reset();
+    }
+
+    // Function để mở modal sửa
+    function openEditModal(id, name, description) {
+        console.log('openEditModal called with id:', id);
+        currentEditId = id;
+        $('#modalTitle').text('Sửa loại tài sản');
+        $('#submitBtn').html('<i class="fas fa-save"></i> Cập nhật');
+        document.getElementById('assetTypeName').value = name;
+        document.getElementById('assetTypeDescription').value = description;
+        $('#assetTypeModal').modal('show');
+    }
+
+    // Function để submit form
+    function submitForm() {
+        console.log('submitForm called');
+        const name = document.getElementById('assetTypeName').value;
+        const description = document.getElementById('assetTypeDescription').value;
+        const url = currentEditId ? `/asset-types/edit/${currentEditId}` : '/asset-types/add';
+
+        console.log('Submitting form to:', url);
+        console.log('Data:', { name, description });
+        console.log('Current edit ID:', currentEditId);
+
+        if (!name.trim()) {
+            alert('Vui lòng nhập tên loại tài sản!');
+            return;
+        }
+
+        // Sử dụng fetch thay vì jQuery để đảm bảo hoạt động
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `name=${encodeURIComponent(name)}&description=${encodeURIComponent(description)}`
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response:', data);
+                if (data.success) {
+                    alert(data.message);
+                    $('#assetTypeModal').modal('hide');
+                    location.reload();
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.log('Error:', error);
+                alert('Có lỗi xảy ra!');
+            });
+    }
+
+    // Function để xóa
+    function deleteAssetType(id, name, buttonElement) {
+        if (confirm(`Bạn có chắc chắn muốn xóa loại tài sản "${name}"?\n\nLoại tài sản sẽ được chuyển vào thùng rác và có thể khôi phục sau.`)) {
+            // Hiển thị loading
+            const btn = buttonElement || event.target.closest('button');
+            const originalHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xóa...';
+
+            fetch(`/asset-types/delete/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Hiển thị thông báo thành công
+                        showNotification(data.message, 'success');
+                        // Reload trang sau 1 giây
+                        setTimeout(() => {
+                        location.reload();
+                        }, 1000);
+                    } else {
+                        // Hiển thị thông báo lỗi với format đẹp hơn
+                        showNotification(data.message, 'error', data.assets_count);
+                        btn.disabled = false;
+                        btn.innerHTML = originalHtml;
+                    }
+                })
+                .catch(error => {
+                    console.error('Delete error:', error);
+                    showNotification('Đã xảy ra lỗi khi xóa loại tài sản. Vui lòng thử lại sau.', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                });
+        }
+    }
+
+    // Function hiển thị thông báo (sử dụng Toast như các flash messages khác)
+    function showNotification(message, type, assetsCount) {
+        // Lấy toast container hoặc tạo mới
+        let toastContainer = document.querySelector('.toast-container');
+        if (!toastContainer) {
+            toastContainer = document.createElement('div');
+            toastContainer.className = 'toast-container position-fixed p-2';
+            toastContainer.style.cssText = 'top: 16px; right: 20px; z-index: 1080;';
+            document.body.appendChild(toastContainer);
+        }
+
+        // Tạo toast mới
+        const toastId = 'assetTypeToast_' + Date.now();
+        const bgClass = type === 'success' ? 'bg-success text-white' : 'bg-danger text-white';
+        const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle';
+        const title = type === 'success' ? 'Thành công' : 'Lỗi';
+        
+        const toast = document.createElement('div');
+        toast.id = toastId;
+        toast.className = 'toast';
+        toast.setAttribute('role', 'alert');
+        toast.setAttribute('aria-live', 'assertive');
+        toast.setAttribute('aria-atomic', 'true');
+        toast.setAttribute('data-delay', '5000');
+        
+        // Format message với line breaks
+        const formattedMessage = message.replace(/\n/g, '<br>');
+        
+        toast.innerHTML = `
+            <div class="toast-header ${bgClass}">
+                <i class="mr-2 fas ${icon}"></i>
+                <strong class="mr-auto">${title}</strong>
+                <small class="text-muted ml-2">Vừa xong</small>
+                <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast" aria-label="Đóng">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                ${formattedMessage}
+                ${assetsCount ? `<br><small class="text-muted">Số lượng tài sản đang sử dụng: <strong>${assetsCount}</strong></small>` : ''}
+            </div>
+        `;
+
+        toastContainer.appendChild(toast);
+        
+        // Khởi động Bootstrap toast
+        $(toast).toast('show');
+        
+        // Xóa toast khỏi DOM sau khi ẩn
+        $(toast).on('hidden.bs.toast', function() {
+            $(this).remove();
+        });
+    }
+
+    // Initialize when document is ready
+    $(document).ready(function () {
+        console.log('Asset types page loaded');
+        console.log('openAddModal function available:', typeof openAddModal);
+        console.log('submitForm function available:', typeof submitForm);
+        console.log('deleteAssetType function available:', typeof deleteAssetType);
+        
+        // Bind delete buttons
+        $(document).on('click', '.btn-delete-asset-type', function() {
+            const id = $(this).data('id');
+            const name = $(this).data('name');
+            deleteAssetType(id, name, this);
+        });
+    });
+
+    // Đảm bảo functions có thể gọi từ global scope
+    window.openAddModal = openAddModal;
+    window.openEditModal = openEditModal;
+    window.submitForm = submitForm;
+    window.deleteAssetType = deleteAssetType;
+
+    console.log('All functions defined and assigned to window');
+</script>
+{% endblock %}

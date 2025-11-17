@@ -1,0 +1,43 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Thêm tài sản{% endblock %}
+{% block content %}
+<h4>Thêm tài sản</h4>
+<form method="post" class="row g-3">
+  <div class="col-md-6">
+    <label class="form-label">Tên</label>
+    <input class="form-control" name="name" required>
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Giá</label>
+    <input class="form-control" name="price" type="number" min="0" step="0.01" value="0">
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Số lượng</label>
+    <input class="form-control" name="quantity" type="number" min="1" value="1">
+  </div>
+  <div class="col-md-6">
+    <label class="form-label">Loại</label>
+    <select name="asset_type_id" class="form-select" required>
+      {% for t in types %}<option value="{{ t.id }}">{{ t.name }}</option>{% endfor %}
+    </select>
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Trạng thái</label>
+    <select name="status" class="form-select">
+      <option value="active">active</option>
+      <option value="maintenance">maintenance</option>
+      <option value="disposed">disposed</option>
+    </select>
+  </div>
+  <div class="col-12">
+    <label class="form-label">Ghi chú</label>
+    <textarea class="form-control" name="notes"></textarea>
+  </div>
+  <div class="col-12">
+    <button class="btn btn-primary">Lưu</button>
+    <a class="btn btn-secondary" href="/assets/">Hủy</a>
+  </div>
+ </form>
+{% endblock %}
+
+

@@ -1,0 +1,21 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Nhật ký{% endblock %}
+{% block content %}
+<h4>Nhật ký hệ thống</h4>
+<table class="table table-striped">
+  <thead><tr><th>Thời gian</th><th>Người dùng</th><th>Module</th><th>Hành động</th><th>Chi tiết</th></tr></thead>
+  <tbody>
+  {% for l in logs.items %}
+    <tr>
+      <td>{{ l.created_at.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+      <td>{{ l.user.username if l.user else '' }}</td>
+      <td>{{ l.module }}</td>
+      <td>{{ l.action }}</td>
+      <td>{{ l.details }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+
+

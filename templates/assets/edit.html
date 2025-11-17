@@ -1,0 +1,141 @@
+{% extends "layouts/base.html" %}
+
+{% block page_title %}Chỉnh sửa tài sản{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('index') }}">Tổng quan</a></li>
+<li class="breadcrumb-item"><a href="{{ url_for('assets') }}">Tài sản</a></li>
+<li class="breadcrumb-item active">Chỉnh sửa</li>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Chỉnh sửa tài sản: {{ asset.name }}</h3>
+    </div>
+    <form method="POST">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="name">Tên tài sản <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ asset.name }}" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="asset_type_id">Loại tài sản <span class="text-danger">*</span></label>
+                        <select class="form-control" id="asset_type_id" name="asset_type_id" required>
+                            <option value="">Chọn loại tài sản</option>
+                            {% for asset_type in asset_types %}
+                            <option value="{{ asset_type.id }}" {% if asset_type.id==asset.asset_type_id %}selected{%
+                                endif %}>{{ asset_type.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="price">Giá (VNĐ) <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="price" name="price" value="{{ asset.price }}"
+                            step="0.01" min="0" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="quantity">Số lượng <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="quantity" name="quantity"
+                            value="{{ asset.quantity }}" min="1" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="purchase_date">Ngày mua</label>
+                        <input type="date" class="form-control" id="purchase_date" name="purchase_date" value="{{ asset.purchase_date }}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="device_code">Mã thiết bị</label>
+                        <input type="text" class="form-control" id="device_code" name="device_code" value="{{ asset.device_code or '' }}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="condition_label">Tình trạng</label>
+                        <select class="form-control" id="condition_label" name="condition_label">
+                            <option value="" {% if not asset.condition_label %}selected{% endif %}>-- Chọn --</option>
+                            <option value="Còn tốt" {% if asset.condition_label=='Còn tốt' %}selected{% endif %}>Còn tốt</option>
+                            <option value="Cần kiểm tra" {% if asset.condition_label=='Cần kiểm tra' %}selected{% endif %}>Cần kiểm tra</option>
+                            <option value="Hỏng nhẹ" {% if asset.condition_label=='Hỏng nhẹ' %}selected{% endif %}>Hỏng nhẹ</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="user_id">Người sở hữu</label>
+                        <select class="form-control" id="user_id" name="user_id">
+                            <option value="">Chọn người sở hữu</option>
+                            {% for user in users %}
+                            <option value="{{ user.id }}" {% if user.id==asset.user_id %}selected{% endif %}>{{
+                                user.username }} - {{ user.email }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="status">Trạng thái <span class="text-danger">*</span></label>
+                        <select class="form-control" id="status" name="status" required>
+                            <option value="active" {% if asset.status=='active' %}selected{% endif %}>Đang sử dụng
+                            </option>
+                            <option value="maintenance" {% if asset.status=='maintenance' %}selected{% endif %}>Bảo trì
+                            </option>
+                            <option value="disposed" {% if asset.status=='disposed' %}selected{% endif %}>Đã thanh lý
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="user_text">Ghi chú của người dùng</label>
+                <textarea class="form-control" id="user_text" name="user_text"
+                    rows="2">{{ asset.user_text or '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="notes">Ghi chú quản trị</label>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="small mb-1">Thời gian sử dụng (tháng)</label>
+                        <input type="number" min="0" class="form-control" name="usage_months" placeholder="VD: 12">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="small mb-1">Độ mới (%)</label>
+                        <input type="number" min="0" max="100" class="form-control" name="condition_percent" placeholder="0-100">
+                    </div>
+                </div>
+                <textarea class="form-control" id="notes" name="notes" rows="2">{{ asset.notes or '' }}</textarea>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Cập nhật
+            </button>
+            <a href="{{ url_for('assets') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

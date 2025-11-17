@@ -1,0 +1,55 @@
+{% extends "layouts/base.html" %}
+{% block page_title %}Báo cáo chi phí bảo trì{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('maintenance_list') }}">Bảo trì</a></li>
+<li class="breadcrumb-item active">Báo cáo</li>
+{% endblock %}
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Tổng chi phí theo tháng - {{ year }}</h3>
+    <div class="card-tools">
+      <form method="get" class="form-inline">
+        <div class="input-group input-group-sm" style="width: 210px;">
+          <input type="number" min="2000" max="2100" name="year" value="{{ year }}" class="form-control">
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i> Xem</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="card-body">
+    {% if data %}
+      <div class="table-responsive">
+        <table class="table table-hover table-striped border">
+          <thead class="bg-light">
+            <tr><th>Tháng</th><th class="text-right">Chi phí</th></tr>
+          </thead>
+          <tbody>
+            {% for row in data %}
+            <tr>
+              <td><span class="badge badge-pill badge-secondary">{{ '%02d'|format(row.month) }}</span></td>
+              <td class="text-right font-weight-600">{{ '{:,.0f}'.format(row.total) }} VNĐ</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot class="bg-white">
+            <tr>
+              <th>Tổng năm</th>
+              <th class="text-right text-primary">{{ '{:,.0f}'.format(total_year) }} VNĐ</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    {% else %}
+      <div class="text-center py-4">
+        <i class="fas fa-chart-line fa-2x text-muted mb-2"></i>
+        <div class="text-muted">Chưa có dữ liệu chi phí trong năm {{ year }}.</div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+

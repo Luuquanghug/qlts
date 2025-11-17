@@ -1,0 +1,254 @@
+{% extends "layouts/base.html" %}
+
+{% block page_title %}Thùng rác{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('index') }}">Tổng quan</a></li>
+<li class="breadcrumb-item active">Thùng rác</li>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+  <div class="col-12">
+    <div class="card card-danger card-outline trash-card">
+      <div class="card-header">
+        <h3 class="card-title mb-0"><i class="fas fa-trash-alt mr-2"></i>Thùng rác</h3>
+        <div class="card-tools">
+          <form method="GET" action="{{ url_for('trash') }}" class="d-inline ml-auto">
+            <label for="trashModuleSelect" class="sr-only">Chọn danh mục</label>
+            <select id="trashModuleSelect" name="module" class="custom-select custom-select-sm trash-filter-select" onchange="this.form.submit()">
+              <option value="all" {% if module=='all' %}selected{% endif %}>Tất cả</option>
+              <option value="assets" {% if module=='assets' %}selected{% endif %}>Tài sản ({{ assets|length }})</option>
+              <option value="asset_types" {% if module=='asset_types' %}selected{% endif %}>Loại tài sản ({{ asset_types|length }})</option>
+              <option value="users" {% if module=='users' %}selected{% endif %}>Người dùng ({{ users|length }})</option>
+              <option value="maintenance" {% if module=='maintenance' %}selected{% endif %}>Bảo trì ({{ maintenance_records|length }})</option>
+            </select>
+          </form>
+        </div>
+      </div>
+      <div class="card-body">
+        {% if module == 'all' or module == 'assets' %}
+        {% if assets %}
+        <div class="card card-outline mb-3">
+          <div class="card-header">
+            <h4 class="card-title"><i class="fas fa-box mr-2"></i>Tài sản đã xóa ({{ assets|length }})</h4>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-striped table-hover mb-0 trash-table">
+                <thead>
+                  <tr>
+                    <th class="col-stt">STT</th>
+                    <th class="col-id">ID</th>
+                    <th class="col-name">Tên</th>
+                    <th class="col-type">Loại</th>
+                    <th class="col-price">Giá trị</th>
+                    <th class="col-date">Ngày xóa</th>
+                    <th class="col-actions">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for asset in assets %}
+                  <tr>
+                    <td>{{ loop.index }}</td>
+                    <td class="text-muted">#{{ asset.id }}</td>
+                    <td><strong>{{ asset.name }}</strong></td>
+                    <td>{{ asset.asset_type.name if asset.asset_type else '-' }}</td>
+                    <td class="text-right">{{ '{:,.0f}'.format(asset.price) }} VNĐ</td>
+                    <td class="text-center">{{ asset.deleted_at|vn_date(include_time=True) }}</td>
+                    <td class="text-right">
+                      <div class="trash-actions">
+                        <form method="POST" action="{{ url_for('trash_restore', module='asset', id=asset.id) }}" class="d-inline">
+                          <button type="submit" class="btn btn-xxs btn-outline-success trash-action-btn" onclick="return confirm('Bạn có chắc muốn khôi phục tài sản này?')" title="Khôi phục">
+                            <i class="fas fa-undo"></i><span class="btn-text ml-1">Khôi phục</span>
+                          </button>
+                        </form>
+                        <form method="POST" action="{{ url_for('trash_permanent_delete', module='asset', id=asset.id) }}" class="d-inline">
+                          <button type="submit" class="btn btn-xxs btn-outline-danger trash-action-btn" onclick="return confirm('Bạn có chắc muốn XÓA VĨNH VIỄN tài sản này? Hành động này không thể hoàn tác!')" title="Xóa vĩnh viễn">
+                            <i class="fas fa-trash"></i><span class="btn-text ml-1">Xóa</span>
+                          </button>
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        {% endif %}
+
+        {% if module == 'all' or module == 'asset_types' %}
+        {% if asset_types %}
+        <div class="card card-outline mb-3">
+          <div class="card-header">
+            <h4 class="card-title"><i class="fas fa-tags mr-2"></i>Loại tài sản đã xóa ({{ asset_types|length }})</h4>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-striped table-hover mb-0 trash-table">
+                <thead>
+                  <tr>
+                    <th class="col-stt">STT</th>
+                    <th class="col-id">ID</th>
+                    <th class="col-name">Tên</th>
+                    <th>Mô tả</th>
+                    <th class="col-date">Ngày xóa</th>
+                    <th class="col-actions">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for asset_type in asset_types %}
+                  <tr>
+                    <td>{{ loop.index }}</td>
+                    <td class="text-muted">#{{ asset_type.id }}</td>
+                    <td><strong>{{ asset_type.name }}</strong></td>
+                    <td>{{ asset_type.description[:50] if asset_type.description else '-' }}{% if asset_type.description and asset_type.description|length > 50 %}...{% endif %}</td>
+                    <td class="text-center">{{ asset_type.deleted_at|vn_date(include_time=True) }}</td>
+                    <td class="text-right">
+                      <div class="trash-actions">
+                        <form method="POST" action="{{ url_for('trash_restore', module='asset_type', id=asset_type.id) }}" class="d-inline">
+                          <button type="submit" class="btn btn-xxs btn-outline-success trash-action-btn" onclick="return confirm('Bạn có chắc muốn khôi phục loại tài sản này?')" title="Khôi phục">
+                            <i class="fas fa-undo"></i><span class="btn-text ml-1">Khôi phục</span>
+                          </button>
+                        </form>
+                        <form method="POST" action="{{ url_for('trash_permanent_delete', module='asset_type', id=asset_type.id) }}" class="d-inline">
+                          <button type="submit" class="btn btn-xxs btn-outline-danger trash-action-btn" onclick="return confirm('Bạn có chắc muốn XÓA VĨNH VIỄN loại tài sản này? Hành động này không thể hoàn tác!')" title="Xóa vĩnh viễn">
+                            <i class="fas fa-trash"></i><span class="btn-text ml-1">Xóa</span>
+                          </button>
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        {% endif %}
+
+        {% if module == 'all' or module == 'users' %}
+        {% if users %}
+        <div class="card card-outline mb-3">
+          <div class="card-header">
+            <h4 class="card-title"><i class="fas fa-users mr-2"></i>Người dùng đã xóa ({{ users|length }})</h4>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-striped table-hover mb-0 trash-table">
+                <thead>
+                  <tr>
+                    <th class="col-stt">STT</th>
+                    <th class="col-id">ID</th>
+                    <th class="col-name">Username</th>
+                    <th>Email</th>
+                    <th>Vai trò</th>
+                    <th class="col-date">Ngày xóa</th>
+                    <th class="col-actions">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for user in users %}
+                  <tr>
+                    <td>{{ loop.index }}</td>
+                    <td class="text-muted">#{{ user.id }}</td>
+                    <td><strong>{{ user.username }}</strong></td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.role.name if user.role else '-' }}</td>
+                    <td class="text-center">{{ user.deleted_at|vn_date(include_time=True) }}</td>
+                    <td class="text-right">
+                      <div class="trash-actions">
+                        <form method="POST" action="{{ url_for('trash_restore', module='user', id=user.id) }}" class="d-inline">
+                          <button type="submit" class="btn btn-xxs btn-outline-success trash-action-btn" onclick="return confirm('Bạn có chắc muốn khôi phục người dùng này?')" title="Khôi phục">
+                            <i class="fas fa-undo"></i><span class="btn-text ml-1">Khôi phục</span>
+                          </button>
+                        </form>
+                        <form method="POST" action="{{ url_for('trash_permanent_delete', module='user', id=user.id) }}" class="d-inline">
+                          <button type="submit" class="btn btn-xxs btn-outline-danger trash-action-btn" onclick="return confirm('Bạn có chắc muốn XÓA VĨNH VIỄN người dùng này? Hành động này không thể hoàn tác!')" title="Xóa vĩnh viễn">
+                            <i class="fas fa-trash"></i><span class="btn-text ml-1">Xóa</span>
+                          </button>
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        {% endif %}
+
+        {% if module == 'all' or module == 'maintenance' %}
+        {% if maintenance_records %}
+        <div class="card card-outline mb-3">
+          <div class="card-header">
+            <h4 class="card-title"><i class="fas fa-tools mr-2"></i>Bản ghi bảo trì đã xóa ({{ maintenance_records|length }})</h4>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-striped table-hover mb-0 trash-table">
+                <thead>
+                  <tr>
+                    <th class="col-id">ID</th>
+                    <th class="col-name">Thiết bị</th>
+                    <th>Loại</th>
+                    <th class="col-date">Ngày bảo trì</th>
+                    <th class="col-date">Ngày xóa</th>
+                    <th class="col-actions">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for rec in maintenance_records %}
+                  <tr>
+                    <td class="text-muted">#{{ rec.id }}</td>
+                    <td><strong>{% if rec.asset %}{{ rec.asset.name }}{% else %}Asset #{{ rec.asset_id }}{% endif %}</strong></td>
+                    <td><span class="badge badge-info">{{ rec.type|maintenance_type_vi }}</span></td>
+                    <td class="text-center">{{ rec.maintenance_date|vn_date }}</td>
+                    <td class="text-center">{{ rec.deleted_at|vn_date(include_time=True) }}</td>
+                    <td class="text-right">
+                      <div class="trash-actions">
+                        <form method="POST" action="{{ url_for('trash_restore', module='maintenance', id=rec.id) }}" class="d-inline">
+                          <button type="submit" class="btn btn-xxs btn-outline-success trash-action-btn" onclick="return confirm('Bạn có chắc muốn khôi phục bản ghi bảo trì này?')" title="Khôi phục">
+                            <i class="fas fa-undo"></i><span class="btn-text ml-1">Khôi phục</span>
+                          </button>
+                        </form>
+                        <form method="POST" action="{{ url_for('trash_permanent_delete', module='maintenance', id=rec.id) }}" class="d-inline">
+                          <button type="submit" class="btn btn-xxs btn-outline-danger trash-action-btn" onclick="return confirm('Bạn có chắc muốn XÓA VĨNH VIỄN bản ghi này? Hành động này không thể hoàn tác!')" title="Xóa vĩnh viễn">
+                            <i class="fas fa-trash"></i><span class="btn-text ml-1">Xóa</span>
+                          </button>
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        {% endif %}
+
+        {% if (module == 'all' and assets|length == 0 and asset_types|length == 0 and users|length == 0 and maintenance_records|length == 0) or 
+              (module == 'assets' and assets|length == 0) or 
+              (module == 'asset_types' and asset_types|length == 0) or 
+              (module == 'users' and users|length == 0) or 
+              (module == 'maintenance' and maintenance_records|length == 0) %}
+        <div class="text-center py-5">
+          <i class="fas fa-trash-alt fa-4x text-muted mb-3"></i>
+          <h4 class="text-muted">Thùng rác trống</h4>
+          <p class="text-muted">Không có bản ghi nào đã bị xóa.</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

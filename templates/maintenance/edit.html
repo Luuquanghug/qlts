@@ -1,0 +1,73 @@
+{% extends "layouts/base.html" %}
+{% block page_title %}Sửa bảo trì #{{ rec.id }}{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('maintenance_list') }}">Bảo trì</a></li>
+<li class="breadcrumb-item active">Sửa</li>
+{% endblock %}
+{% block content %}
+<div class="card">
+  <div class="card-body">
+    <form method="post">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label>Thiết bị</label>
+          <select name="asset_id" class="form-control" required>
+            {% for a in assets %}
+            <option value="{{ a.id }}" {% if a.id==rec.asset_id %}selected{% endif %}>#{{ a.id }} - {{ a.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group col-md-3">
+          <label>Ngày</label>
+          <input type="date" name="maintenance_date" class="form-control" value="{{ rec.maintenance_date.isoformat() }}">
+        </div>
+        <div class="form-group col-md-3">
+          <label>Loại</label>
+          <select name="type" class="form-control">
+            <option value="maintenance" {% if rec.type=='maintenance' %}selected{% endif %}>Bảo trì định kỳ</option>
+            <option value="repair" {% if rec.type=='repair' %}selected{% endif %}>Sửa chữa</option>
+            <option value="inspection" {% if rec.type=='inspection' %}selected{% endif %}>Kiểm tra</option>
+            <option value="upgrade" {% if rec.type=='upgrade' %}selected{% endif %}>Nâng cấp</option>
+            <option value="cleaning" {% if rec.type=='cleaning' %}selected{% endif %}>Vệ sinh</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label>Nhà cung cấp</label>
+          <input type="text" name="vendor" class="form-control" value="{{ rec.vendor }}">
+        </div>
+        <div class="form-group col-md-4">
+          <label>Người phụ trách</label>
+          <input type="text" name="person_in_charge" class="form-control" value="{{ rec.person_in_charge }}">
+        </div>
+        <div class="form-group col-md-4">
+          <label>Chi phí (VNĐ)</label>
+          <input type="number" step="0.01" min="0" name="cost" class="form-control" value="{{ rec.cost }}">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label>Kỳ bảo trì tiếp theo</label>
+          <input type="date" name="next_due_date" class="form-control" value="{{ rec.next_due_date.isoformat() if rec.next_due_date }}">
+        </div>
+        <div class="form-group col-md-6">
+          <label>Trạng thái</label>
+          <select name="status" class="form-control">
+            <option value="completed" {% if rec.status=='completed' %}selected{% endif %}>Đã hoàn thành</option>
+            <option value="scheduled" {% if rec.status=='scheduled' %}selected{% endif %}>Đã lên lịch</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Mô tả</label>
+        <textarea name="description" class="form-control" rows="3">{{ rec.description }}</textarea>
+      </div>
+      <button class="btn btn-primary" type="submit"><i class="fas fa-save"></i> Lưu</button>
+      <a class="btn btn-secondary" href="{{ url_for('maintenance_list') }}">Hủy</a>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+

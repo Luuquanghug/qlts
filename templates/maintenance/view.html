@@ -1,0 +1,68 @@
+{% extends "layouts/base.html" %}
+
+{% block page_title %}Chi tiết bảo trì #{{ rec.id }}{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('maintenance_list') }}">Bảo trì</a></li>
+<li class="breadcrumb-item active">Chi tiết</li>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h3 class="card-title mb-0">Bản ghi #{{ rec.id }}</h3>
+    <div>
+      <a class="btn btn-sm btn-secondary" href="{{ url_for('maintenance_list') }}"><i class="fas fa-arrow-left"></i> Quay lại</a>
+      <a class="btn btn-sm btn-warning" href="{{ url_for('maintenance_edit', id=rec.id) }}"><i class="fas fa-edit"></i> Sửa</a>
+      <a class="btn btn-sm btn-danger" href="{{ url_for('maintenance_delete', id=rec.id) }}" data-confirm="Xóa bản ghi bảo trì #{{ rec.id }}?"><i class="fas fa-trash"></i> Xóa</a>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <dl class="row">
+          <dt class="col-sm-5">Thiết bị</dt>
+          <dd class="col-sm-7">#{{ rec.asset_id }} - {{ rec.asset.name }}</dd>
+
+          <dt class="col-sm-5">Ngày bảo trì</dt>
+          <dd class="col-sm-7">{{ rec.maintenance_date|vn_date }}</dd>
+
+          <dt class="col-sm-5">Loại</dt>
+          <dd class="col-sm-7">{{ rec.type|maintenance_type_vi }}</dd>
+
+          <dt class="col-sm-5">Trạng thái</dt>
+          <dd class="col-sm-7">{{ rec.status | maintenance_status_vi }}</dd>
+
+          <dt class="col-sm-5">Kỳ bảo trì tiếp theo</dt>
+          <dd class="col-sm-7">{{ rec.next_due_date|vn_date if rec.next_due_date else '-' }}</dd>
+        </dl>
+      </div>
+      <div class="col-md-6">
+        <dl class="row">
+          <dt class="col-sm-5">Nhà cung cấp</dt>
+          <dd class="col-sm-7">{{ rec.vendor or '-' }}</dd>
+
+          <dt class="col-sm-5">Người phụ trách</dt>
+          <dd class="col-sm-7">{{ rec.person_in_charge or '-' }}</dd>
+
+          <dt class="col-sm-5">Chi phí</dt>
+          <dd class="col-sm-7">{{ '{:,.0f}'.format(rec.cost or 0) }} VNĐ</dd>
+
+          <dt class="col-sm-5">Tạo lúc</dt>
+          <dd class="col-sm-7">{{ rec.created_at|vn_date(True) if rec.created_at }}</dd>
+
+          <dt class="col-sm-5">Cập nhật</dt>
+          <dd class="col-sm-7">{{ rec.updated_at|vn_date(True) if rec.updated_at }}</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="mt-3">
+      <h5>Mô tả</h5>
+      <div class="border rounded p-3 bg-light" style="white-space: pre-wrap;">{{ rec.description or '—' }}</div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+

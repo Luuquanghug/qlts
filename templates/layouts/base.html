@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Quản lý tài sản công ty{% endblock %}</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- AdminLTE -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+</head>
+
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+            </ul>
+
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user"></i>
+                        {{ session.username or 'Khách' }}
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Thông tin cá nhân</a>
+                        <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Cài đặt</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ url_for('logout') }}"><i
+                                class="fas fa-sign-out-alt mr-2"></i>Đăng xuất</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="{{ url_for('index') }}" class="brand-link d-flex align-items-center justify-content-between">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="brand-logo-img">
+                <span class="brand-text font-weight-light">QL Tài Sản</span>
+                <button id="sidebarToggle" class="btn btn-sm btn-outline-light ml-auto" style="border-radius:8px;">
+                    <i class="fas fa-angle-double-left"></i>
+                </button>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar user panel -->
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="image">
+                        <i class="fas fa-user-circle text-white"></i>
+                    </div>
+                    <div class="info">
+                        <a href="#" class="d-block">{{ session.username or 'Khách' }}</a>
+                        <small class="text-muted">{{ session.role|title if session.role else 'Người dùng' }}</small>
+                    </div>
+                </div>
+
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                        data-accordion="false">
+                        <li class="nav-item">
+                            <a href="{{ url_for('index') }}"
+                                class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>Tổng quan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('assets') }}"
+                                class="nav-link {% if request.endpoint in ['assets', 'add_asset', 'edit_asset'] %}active{% endif %}">
+                                <i class="nav-icon fas fa-box"></i>
+                                <p>Tài sản</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('asset_types') }}"
+                                class="nav-link {% if request.endpoint in ['asset_types', 'add_asset_type'] %}active{% endif %}">
+                                <i class="nav-icon fas fa-tags"></i>
+                                <p>Loại tài sản</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('users') }}"
+                                class="nav-link {% if request.endpoint in ['users', 'add_user'] %}active{% endif %}">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>Người dùng</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('maintenance_dashboard') }}"
+                                class="nav-link {% if request.endpoint in ['maintenance_dashboard','maintenance_list','maintenance_add','maintenance_edit','maintenance_report','maintenance_view'] %}active{% endif %}">
+                                <i class="nav-icon fas fa-tools"></i>
+                                <p>Bảo trì thiết bị IT</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('audit_logs') }}"
+                                class="nav-link {% if request.endpoint in ['audit_logs'] %}active{% endif %}">
+                                <i class="nav-icon fas fa-clipboard-list"></i>
+                                <p>Nhật ký</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('trash') }}"
+                                class="nav-link {% if request.endpoint in ['trash', 'trash_restore', 'trash_permanent_delete'] %}active{% endif %}">
+                                <i class="nav-icon fas fa-trash-alt"></i>
+                                <p>Thùng rác</p>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <!-- Content Header -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">{% block page_title %}Tổng quan{% endblock %}</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                {% block breadcrumb %}{% endblock %}
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <!-- Toast notifications container (top-right) -->
+                    <div class="toast-container position-fixed p-2" style="top: 16px; right: 20px; z-index: 1080;">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                        {% for category, message in messages %}
+                        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3500">
+                            <div class="toast-header {{ 'bg-danger text-white' if category=='error' else ('bg-success text-white' if category=='success' else ('bg-warning text-dark' if category=='warning' else 'bg-info text-white')) }}">
+                                <i class="mr-2 fas {{ 'fa-times-circle' if category=='error' else ('fa-check-circle' if category=='success' else ('fa-exclamation-triangle' if category=='warning' else 'fa-info-circle')) }}"></i>
+                                <strong class="mr-auto">{{ 'Lỗi' if category=='error' else ('Thành công' if category=='success' else ('Cảnh báo' if category=='warning' else 'Thông báo')) }}</strong>
+                                <small class="text-muted ml-2">Vừa xong</small>
+                                <button type="button" class="ml-2 mb-1 close {{ 'text-white' if category in ['error','success','info'] else '' }}" data-dismiss="toast" aria-label="Đóng"><span aria-hidden="true">&times;</span></button>
+                            </div>
+                            <div class="toast-body">{{ message }}</div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        {% endwith %}
+                    </div>
+
+                    {% block content %}{% endblock %}
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <strong>Bản quyền &copy; 2024 <a href="#">Quản lý tài sản công ty</a>.</strong>
+            Đã đăng ký bản quyền.
+        </footer>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+    <script>
+      (function(){
+        // Show toast
+        $(function(){ $('.toast').toast('show'); });
+
+        // Restore sidebar state
+        try{
+          var collapsed = localStorage.getItem('sidebarCollapsed');
+          if(collapsed === '1'){
+            document.body.classList.add('sidebar-collapse');
+          }
+        }catch(e){}
+
+        // Toggle button inside sidebar brand
+        var btn = document.getElementById('sidebarToggle');
+        if(btn){
+          btn.addEventListener('click', function(ev){
+            ev.preventDefault();
+            document.body.classList.toggle('sidebar-collapse');
+            try{ localStorage.setItem('sidebarCollapsed', document.body.classList.contains('sidebar-collapse') ? '1' : '0'); }catch(e){}
+          });
+        }
+
+        // Also persist when using AdminLTE navbar hamburger
+        document.addEventListener('click', function(e){
+          var navToggle = e.target.closest('[data-widget="pushmenu"]');
+          if(!navToggle) return;
+          setTimeout(function(){
+            try{ localStorage.setItem('sidebarCollapsed', document.body.classList.contains('sidebar-collapse') ? '1' : '0'); }catch(e){}
+          }, 0);
+        });
+      })();
+    </script>
+    {% block extra_js %}{% endblock %}
+
+    <!-- Confirm Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Xác nhận</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmMessage">Bạn có chắc chắn muốn thực hiện thao tác này?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <a id="confirmOkBtn" href="#" class="btn btn-danger">Xóa</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

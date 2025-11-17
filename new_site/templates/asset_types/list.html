@@ -1,0 +1,27 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Loại tài sản{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>Loại tài sản</h4>
+  <a class="btn btn-primary" href="/types/add">Thêm loại</a>
+</div>
+<form class="row g-2 mb-3">
+  <div class="col-auto"><input class="form-control" name="q" value="{{ q }}" placeholder="Tìm tên..."></div>
+  <div class="col-auto"><button class="btn btn-outline-secondary">Tìm</button></div>
+</form>
+<table class="table table-striped">
+  <thead><tr><th>ID</th><th>Tên</th><th>Mô tả</th><th>Ngày tạo</th></tr></thead>
+  <tbody>
+  {% for t in items.items %}
+    <tr>
+      <td>{{ t.id }}</td>
+      <td>{{ t.name }}</td>
+      <td>{{ t.description }}</td>
+      <td>{{ t.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+
+

@@ -1,0 +1,73 @@
+{% extends "layouts/base.html" %}
+{% block page_title %}Thêm bảo trì{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('maintenance_list') }}">Bảo trì</a></li>
+<li class="breadcrumb-item active">Thêm</li>
+{% endblock %}
+{% block content %}
+<div class="card">
+  <div class="card-body">
+    <form method="post">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label>Thiết bị</label>
+          <select name="asset_id" class="form-control" required>
+            {% for a in assets %}
+            <option value="{{ a.id }}">#{{ a.id }} - {{ a.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group col-md-3">
+          <label>Ngày</label>
+          <input type="date" name="maintenance_date" class="form-control">
+        </div>
+        <div class="form-group col-md-3">
+          <label>Loại</label>
+          <select name="type" class="form-control">
+            <option value="maintenance">Bảo trì định kỳ</option>
+            <option value="repair">Sửa chữa</option>
+            <option value="inspection">Kiểm tra</option>
+            <option value="upgrade">Nâng cấp</option>
+            <option value="cleaning">Vệ sinh</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label>Nhà cung cấp</label>
+          <input type="text" name="vendor" class="form-control">
+        </div>
+        <div class="form-group col-md-4">
+          <label>Người phụ trách</label>
+          <input type="text" name="person_in_charge" class="form-control">
+        </div>
+        <div class="form-group col-md-4">
+          <label>Chi phí (VNĐ)</label>
+          <input type="number" step="0.01" min="0" name="cost" class="form-control" value="0">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label>Kỳ bảo trì tiếp theo</label>
+          <input type="date" name="next_due_date" class="form-control">
+        </div>
+        <div class="form-group col-md-6">
+          <label>Trạng thái</label>
+          <select name="status" class="form-control">
+            <option value="completed">Đã hoàn thành</option>
+            <option value="scheduled">Đã lên lịch</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Mô tả</label>
+        <textarea name="description" class="form-control" rows="3"></textarea>
+      </div>
+      <button class="btn btn-primary" type="submit"><i class="fas fa-save"></i> Lưu</button>
+      <a class="btn btn-secondary" href="{{ url_for('maintenance_list') }}">Hủy</a>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+

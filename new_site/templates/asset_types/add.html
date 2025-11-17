@@ -1,0 +1,21 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Thêm loại tài sản{% endblock %}
+{% block content %}
+<h4>Thêm loại tài sản</h4>
+<form method="post" class="row g-3">
+  <div class="col-md-6">
+    <label class="form-label">Tên</label>
+    <input class="form-control" name="name" required>
+  </div>
+  <div class="col-12">
+    <label class="form-label">Mô tả</label>
+    <textarea class="form-control" name="description"></textarea>
+  </div>
+  <div class="col-12">
+    <button class="btn btn-primary">Lưu</button>
+    <a class="btn btn-secondary" href="/types/">Hủy</a>
+  </div>
+</form>
+{% endblock %}
+
+

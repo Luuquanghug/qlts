@@ -1,0 +1,39 @@
+{% extends "layouts/base.html" %}
+
+{% block page_title %}Chỉnh sửa loại tài sản{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('index') }}">Tổng quan</a></li>
+<li class="breadcrumb-item"><a href="{{ url_for('asset_types') }}">Loại tài sản</a></li>
+<li class="breadcrumb-item active">Chỉnh sửa</li>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Chỉnh sửa: {{ asset_type.name }}</h3>
+    </div>
+    <form method="POST" action="{{ url_for('edit_asset_type', id=asset_type.id) }}">
+        <div class="card-body">
+            <div class="form-group">
+                <label for="name">Tên loại tài sản <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ asset_type.name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Mô tả</label>
+                <textarea class="form-control" id="description" name="description" rows="3">{{ asset_type.description or '' }}</textarea>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Cập nhật
+            </button>
+            <a href="{{ url_for('asset_types') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+

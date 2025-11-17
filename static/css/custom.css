@@ -1,0 +1,524 @@
+/* Custom CSS for Asset Management System */
+
+/* Theme variables */
+:root{
+    --primary:#ff6a00;      /* Orange */
+    --primary-700:#e65c00;  /* Darker Orange */
+    --bg-soft:#fff7f1;
+}
+
+/* Sidebar & header */
+.brand-link {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.brand-image {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+}
+
+/* Brand & Login logos */
+.brand-logo-img {
+    height: 32px;
+    width: auto;
+    margin-right: 0.5rem;
+    display: inline-block;
+}
+
+.login-logo-img {
+    height: 64px;
+    width: auto;
+}
+
+/* Card customization */
+.card {
+    box-shadow: 0 6px 18px rgba(0,0,0,.08);
+    border: 0;
+    border-radius: 12px;
+}
+
+.card-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #eef1f4;
+}
+
+/* Table customization */
+.table th {
+    background-color: #f8f9fa;
+    border-top: 0;
+    font-weight: 600;
+}
+.table tbody tr:hover{background:#f9fbff}
+
+/* Trash page alignment */
+.trash-table th, .trash-table td { vertical-align: middle; }
+.trash-table.table { font-size: 0.98rem; line-height: 1.45; }
+.trash-table th { padding: 10px 12px; color:#2f3949; }
+.trash-table td { padding: 10px 12px; }
+.trash-table thead th { background:#f1f3f7; border-bottom:1px solid #e5e8ee; }
+.trash-table tbody tr:nth-child(odd){ background:#fcfdff; }
+.trash-table tbody tr:hover{ background:#f5f8ff; }
+.trash-table .col-id { width: 8%; text-align: center; white-space: nowrap; }
+.trash-table .col-name { width: 32%; }
+.trash-table .col-type { width: 16%; }
+.trash-table .col-price { width: 16%; white-space: nowrap; text-align: right; }
+.trash-table .col-date { width: 16%; white-space: nowrap; text-align: center; }
+.trash-table .col-actions { width: 12%; text-align: right; white-space: nowrap; }
+
+.trash-tabs .btn { border-radius: 16px; padding: 4px 10px; font-size: 0.9rem; }
+.trash-tabs .btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.trash-card .card-header{ display:flex; align-items:center; justify-content:space-between; padding-right: 8px; }
+.trash-card .card-header .card-tools{ margin-left:auto; }
+
+/* Extra small action buttons */
+.btn-xxs { padding: 2px 8px; font-size: 0.82rem; line-height: 1.35; border-radius: 6px; }
+.btn-xxs i { font-size: 0.85rem; }
+
+/* Compact dropdown for trash filter */
+.trash-filter-select{ min-width: 220px; }
+
+/* Consistent action buttons in trash tables */
+.trash-actions{ display:flex; flex-direction:row; align-items:center; justify-content:flex-end; }
+.trash-actions .btn{ margin:0 0 0 6px; }
+.trash-action-btn{ width:auto; text-align:center; padding: 0 12px; height:34px; border-radius:999px; display:inline-flex; align-items:center; font-weight:600; white-space:nowrap; box-shadow:0 2px 8px rgba(0,0,0,.05); }
+.trash-action-btn i{ font-size: 0.95rem; opacity:.9; }
+.btn-outline-success.trash-action-btn{ color:#198754; border-color:#198754; background:#ffffff; }
+.btn-outline-success.trash-action-btn:hover{ background:#e9f7ef; }
+.btn-outline-danger.trash-action-btn{ color:#dc3545; border-color:#dc3545; background:#ffffff; }
+.btn-outline-danger.trash-action-btn:hover{ background:#fff0f1; }
+@media (max-width: 768px){
+  .trash-action-btn{ padding: 0 10px; height:32px; }
+}
+
+/* Trash page – color accents */
+.trash-card{ border-radius:10px; border-color:#eef2f7; background:linear-gradient(180deg,#ffffff 0%,#fafbff 100%); }
+.trash-card .card-header{ background:linear-gradient(90deg,#f6f8ff 0%,#ffffff 100%); border-bottom:1px solid #eef2f7; color:#34415b; font-weight:700; }
+.trash-table thead th{ background:#eef4ff; color:#334155; border-bottom:1px solid #e2e8f0; }
+.trash-table tbody tr:nth-child(odd){ background:#fbfdff; }
+.trash-table tbody tr:hover{ background:#eef6ff; }
+
+/* Section-specific header accents (order-based) */
+.trash-card:nth-of-type(1) .card-header{ border-left:4px solid #22c55e; }
+.trash-card:nth-of-type(2) .card-header{ border-left:4px solid #3b82f6; }
+.trash-card:nth-of-type(3) .card-header{ border-left:4px solid #8b5cf6; }
+.trash-card:nth-of-type(4) .card-header{ border-left:4px solid #f59e0b; }
+
+/* Filter dropdown polish */
+.trash-filter-select{ border-radius:999px; padding-left:14px; padding-right:34px; background-color:#ffffff; border-color:#e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,.04); }
+.trash-filter-select:focus{ border-color:#93c5fd; box-shadow:0 0 0 0.15rem rgba(59,130,246,.2); }
+
+/* Improve badge contrast */
+.badge.badge-info { background-color:#17a2b8; }
+
+/* Responsive: show icon-only on small screens */
+@media (max-width: 768px){
+  .btn-text { display:none; }
+}
+
+/* Keep action buttons on one line */
+.table td.actions {
+    white-space: nowrap;
+}
+.table td.actions .btn + .btn {
+    margin-left: 6px;
+}
+
+/* Badge customization */
+.badge {
+    font-size: 0.75em;
+}
+
+/* Form customization */
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.2rem rgba(13,110,253,.15);
+}
+
+/* Button customization */
+.btn {
+    border-radius: 0.25rem;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+.btn-primary{background: linear-gradient(135deg, var(--primary) 0%, var(--primary-700) 100%); border-color: var(--primary-700); box-shadow: 0 6px 14px rgba(255,106,0,.25);} 
+.btn-primary:hover{background: var(--primary-700); border-color: var(--primary-700);}
+
+/* Alert customization */
+.alert {
+    border: 0;
+    border-radius: 0.25rem;
+}
+
+/* Small box customization */
+.small-box {
+    border-radius: 0.25rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.small-box .inner {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Ensure all KPI cards have equal height and width */
+.row.mb-4 > [class*="col-"],
+.row.mb-4 > [class*="col-lg-"],
+.row.mb-4 > [class*="col-md-"],
+.row.mb-4 > [class*="col-sm-"] {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.row.mb-4 .small-box {
+    width: 100%;
+    min-height: 150px;
+    margin-bottom: 0;
+}
+
+/* Ensure consistent inner padding */
+.small-box .inner {
+    padding: 15px;
+    min-height: 100px;
+}
+
+.small-box .inner h3 {
+    margin: 0 0 8px 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.small-box .inner h3 small {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.small-box .inner p {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.small-box .inner small {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.75rem;
+    opacity: 0.9;
+    line-height: 1.3;
+}
+
+/* Ensure icon size is consistent */
+.small-box .icon {
+    font-size: 2.5rem;
+    opacity: 0.15;
+    transition: opacity 0.3s;
+}
+
+.small-box:hover .icon {
+    opacity: 0.2;
+}
+
+/* Footer consistency */
+.small-box-footer {
+    padding: 8px 15px;
+    text-align: center;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    background-color: rgba(0,0,0,0.05);
+    transition: background-color 0.3s;
+    font-size: 0.85rem;
+}
+
+.small-box-footer:hover {
+    background-color: rgba(0,0,0,0.1);
+}
+
+/* DataTable customization */
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_processing,
+.dataTables_wrapper .dataTables_paginate {
+    color: #6c757d;
+}
+
+/* Pagination */
+.pagination .page-link{color: var(--primary); border-color:#ffe3d1}
+.pagination .page-item.active .page-link{background: var(--primary); border-color: var(--primary)}
+.pagination .page-link:hover{background:#fff0e6}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-header .card-tools {
+        margin-top: 0.5rem;
+    }
+    
+    .table-responsive {
+        border: 0;
+    }
+}
+
+/* Layout polish */
+body.sidebar-mini .main-header{box-shadow: 0 6px 16px rgba(0,0,0,.06)}
+.content-wrapper{background: var(--bg-soft)}
+.main-sidebar{background:#212631}
+.nav-sidebar>.nav-item>.nav-link.active{background:#ff7a1a;color:#fff}
+.nav-sidebar .nav-link{color:#cfd6e4}
+.nav-sidebar .nav-link:hover{background:#2a3242;color:#fff}
+.brand-text{font-weight:600}
+
+/* Decorative header background */
+.page-hero{
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    /* Tech pattern: boxes, barcode lines – suitable for asset/inventory */
+    background: linear-gradient(120deg, rgba(255,122,26,.18), rgba(34,197,94,.12)),
+      url("data:image/svg+xml;utf8,\
+      <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 200'>\
+        <defs>\
+          <pattern id='grid' width='40' height='40' patternUnits='userSpaceOnUse'>\
+            <rect x='0' y='0' width='40' height='40' fill='none' stroke='%23ffffff' stroke-opacity='0.12'/>\
+          </pattern>\
+        </defs>\
+        <rect width='800' height='200' fill='%23fefefe' fill-opacity='0'/>\
+        <rect width='800' height='200' fill='url(%23grid)'/>\
+        <g fill='%23ffffff' fill-opacity='0.25'>\
+          <rect x='40' y='30' width='90' height='60' rx='6'/>\
+          <rect x='170' y='80' width='110' height='70' rx='6'/>\
+          <rect x='330' y='40' width='80' height='55' rx='6'/>\
+          <rect x='450' y='90' width='120' height='65' rx='6'/>\
+          <rect x='610' y='50' width='100' height='60' rx='6'/>\
+        </g>\
+        <g stroke='%23ffffff' stroke-opacity='0.22'>\
+          <line x1='720' y1='20' x2='720' y2='180' stroke-width='6'/>\
+          <line x1='735' y1='20' x2='735' y2='180' stroke-width='2'/>\
+          <line x1='748' y1='20' x2='748' y2='180' stroke-width='3'/>\
+        </g>\
+      </svg>") center/cover no-repeat;
+    min-height: 140px;
+}
+.page-hero .overlay{
+    position:absolute; inset:0; background: linear-gradient(90deg, rgba(0,0,0,.25), rgba(0,0,0,.05));
+}
+.page-hero .hero-content{ position:relative; z-index:2; color:#fff; padding:22px; }
+.page-hero h2{ font-weight:800; letter-spacing:.3px; margin:0; }
+.page-hero p{ margin:4px 0 0 0; opacity:.9 }
+
+/* Maintenance cards themed backgrounds (SVG data URIs) */
+.card-bg-overdue{
+  background-image: url("data:image/svg+xml;utf8,\
+    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 300'>\
+      <defs>\
+        <linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>\
+          <stop offset='0' stop-color='%23ffeded'/>\
+          <stop offset='1' stop-color='%23fff5f5'/>\
+        </linearGradient>\
+      </defs>\
+      <rect width='800' height='300' fill='url(%23g)'/>\
+      <g fill='%23ff6b6b' fill-opacity='0.25'>\
+        <path d='M90 60 h60 v60 h-60 z'/>\
+        <path d='M210 110 h90 v70 h-90 z'/>\
+        <path d='M360 70 h70 v50 h-70 z'/>\
+      </g>\
+      <g stroke='%23ff6b6b' stroke-opacity='0.35' stroke-width='6'>\
+        <circle cx='680' cy='80' r='34' fill='none'/>\
+        <line x1='680' y1='80' x2='680' y2='56'/>\
+        <line x1='680' y1='80' x2='700' y2='80'/>\
+      </g>\
+    </svg>");
+  background-size: cover; background-position: center;
+}
+
+.card-bg-upcoming{
+  background-image: url("data:image/svg+xml;utf8,\
+    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 300'>\
+      <defs>\
+        <linearGradient id='g2' x1='0' y1='0' x2='1' y2='1'>\
+          <stop offset='0' stop-color='%23fff8e1'/>\
+          <stop offset='1' stop-color='%23fffbea'/>\
+        </linearGradient>\
+      </defs>\
+      <rect width='800' height='300' fill='url(%23g2)'/>\
+      <g fill='%23f59e0b' fill-opacity='0.25'>\
+        <circle cx='120' cy='100' r='32'/>\
+        <circle cx='220' cy='150' r='28'/>\
+        <circle cx='320' cy='90' r='22'/>\
+      </g>\
+      <g stroke='%23f59e0b' stroke-opacity='0.35' stroke-width='6'>\
+        <path d='M680 70 a40 40 0 1 0 0.1 0' fill='none'/>\
+        <line x1='680' y1='70' x2='680' y2='40'/>\
+      </g>\
+    </svg>");
+  background-size: cover; background-position: center;
+}
+
+/* Loading spinner */
+.loading {
+    display: none;
+    text-align: center;
+    padding: 2rem;
+}
+
+.loading i {
+    font-size: 2rem;
+    color: #007bff;
+}
+
+/* Empty state styling */
+.text-center.py-4 i {
+    opacity: 0.5;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Modern login layout: push login box to the right on wide screens */
+.login-page{display:flex; align-items:center; min-height:100vh; background: linear-gradient(135deg, #fff6ef 0%, #f7fff9 60%, #ffffff 100%); position:relative; overflow:hidden;} 
+/* Animated ambient gradient */
+.login-page::after{
+  content:""; position:absolute; inset:-20%;
+  background: radial-gradient(28% 28% at 22% 18%, rgba(255,122,26,.16) 0%, rgba(255,122,26,0) 70%),
+              radial-gradient(25% 25% at 88% 22%, rgba(34,197,94,.14) 0%, rgba(34,197,94,0) 70%),
+              radial-gradient(25% 25% at 40% 82%, rgba(59,130,246,.14) 0%, rgba(59,130,246,0) 70%);
+  filter: blur(40px);
+  animation: floatGrad 16s ease-in-out infinite alternate;
+  z-index: 0; pointer-events: none;
+}
+@keyframes floatGrad{to{transform: translate3d(0,-20px,0) scale(1.02);}}
+.modern-login{margin-left:auto; margin-right:5vw; max-width:420px; width:100%; position:relative; z-index:5;}
+.modern-login .card, .modern-login .login-card-body, .modern-login button{position:relative; z-index:6; pointer-events:auto;}
+.modern-login .card{border-radius:16px; box-shadow: 0 20px 50px rgba(0,0,0,.12); background: rgba(255,255,255,.75); backdrop-filter: blur(10px);} 
+.brand-title{font-size: 1.75rem; font-weight:700; letter-spacing:.3px;}
+/* Input and button sizing like the sample */
+.modern-login .form-control{height:48px; border-radius:10px;}
+.modern-login .btn.btn-primary{height:50px; border-radius:10px; font-weight:700;}
+.modern-login .btn.btn-primary.glow{box-shadow:0 10px 22px rgba(255,106,0,.35), 0 0 0 0 rgba(255,106,0,.4); animation: pulseGlow 2.2s infinite;} 
+@keyframes pulseGlow{0%{box-shadow:0 10px 22px rgba(255,106,0,.35), 0 0 0 0 rgba(255,106,0,.35);} 70%{box-shadow:0 10px 22px rgba(255,106,0,.35), 0 0 0 18px rgba(255,106,0,0);} 100%{box-shadow:0 10px 22px rgba(255,106,0,.35), 0 0 0 0 rgba(255,106,0,0);} }
+.modern-login .login-subtitle{color:#6c757d; margin-top:4px;}
+.modern-login .card{border-top: 6px solid var(--primary);} 
+
+/* Decorative illustration on login page (left side) */
+.login-page::before{
+  content:"";
+  position: absolute; left:5%; top:10%; bottom:10%; width:38%; border-radius:20px;
+  background: url("data:image/svg+xml;utf8,\
+    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 900'>\
+      <defs>\
+        <linearGradient id='lg' x1='0' y1='0' x2='1' y2='1'>\
+          <stop offset='0' stop-color='%23fff3e8'/>\
+          <stop offset='1' stop-color='%23f0fff4'/>\
+        </linearGradient>\
+      </defs>\
+      <rect width='900' height='900' rx='30' fill='url(%23lg)'/>\
+      <g fill='%23ff7a1a' fill-opacity='.14'>\
+        <rect x='80' y='140' width='200' height='140' rx='16'/>\
+        <rect x='340' y='220' width='180' height='120' rx='16'/>\
+        <rect x='560' y='160' width='220' height='140' rx='16'/>\
+      </g>\
+      <g stroke='%2322c55e' stroke-opacity='.3' stroke-width='8'>\
+        <circle cx='170' cy='520' r='60' fill='none'/>\
+        <path d='M160 510 h20 v20 h-20 z' fill='%2322c55e' stroke='none'/>\
+        <path d='M450 520 h220'/>\
+        <path d='M450 560 h180'/>\
+      </g>\
+      <g fill='%233b82f6' fill-opacity='.18'>\
+        <rect x='120' y='640' width='240' height='140' rx='16'/>\
+        <rect x='420' y='620' width='320' height='120' rx='16'/>\
+      </g>\
+    </svg>") center/cover no-repeat;
+  box-shadow: 0 18px 40px rgba(0,0,0,.06);
+  z-index: 1; pointer-events: none;
+}
+
+/* Features list with icons */
+.login-features{list-style:none; padding:0; margin:18px 0 0 0; color:#334155;}
+.login-features{pointer-events:none;}
+.login-features li{display:flex; align-items:center; margin-bottom:8px; font-weight:600;}
+.login-features li i{width:26px; height:26px; display:inline-flex; align-items:center; justify-content:center; border-radius:8px; margin-right:10px; background:#fff; box-shadow:0 4px 10px rgba(0,0,0,.06); color:#ff7a1a;}
+
+/* Sample account chips */
+.account-chip{display:inline-flex; align-items:center; padding:6px 10px; border-radius:999px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,.08); font-size:.8rem; font-weight:700; margin:6px;}
+.account-chip .badge-dot{width:8px; height:8px; border-radius:999px; margin-right:8px; display:inline-block;}
+.account-chip.admin .badge-dot{background:#3b82f6}
+.account-chip.manager .badge-dot{background:#f59e0b}
+.account-chip.user .badge-dot{background:#22c55e}
+
+/* Top-right language dropdown */
+.lang-switch{position:absolute; top:12px; right:20px; z-index:1000;}
+.lang-switch .btn{border-radius:999px; box-shadow:0 2px 10px rgba(0,0,0,.05);} 
+.lang-flag{font-size:18px; line-height:1; display:inline-block;}
+.lang-switch .fi{border-radius:2px; box-shadow:0 1px 2px rgba(0,0,0,.1);} 
+
+/* Pretty, slim toast notifications */
+.toast-container{pointer-events:none;} /* allow clicks to pass except on toast */
+.toast-container .toast{pointer-events:auto; min-width:320px; max-width:380px; border-radius:10px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.15); border:0;}
+.toast-container .toast-header{padding:.4rem .65rem;}
+.toast-container .toast-body{padding:.5rem .65rem; font-size:.9rem;}
+.toast-container .toast + .toast{margin-top:.5rem;}
+/* Hide the X button */
+.toast-container .toast .close{display:none;}
+@media (max-width: 992px){
+  .modern-login{margin: 40px auto;}
+  .login-page::before{display:none;}
+}
+
+/* Ẩn text mặc định của browser khi input date trống */
+input[type="date"]:not(:valid)::-webkit-datetime-edit {
+    color: transparent !important;
+}
+
+input[type="date"]:not(:valid)::-webkit-datetime-edit-text,
+input[type="date"]:not(:valid)::-webkit-datetime-edit-month-field,
+input[type="date"]:not(:valid)::-webkit-datetime-edit-day-field,
+input[type="date"]:not(:valid)::-webkit-datetime-edit-year-field {
+    color: transparent !important;
+}
+
+/* Khi input có giá trị, hiển thị text bình thường */
+input[type="date"]:valid::-webkit-datetime-edit {
+    color: inherit !important;
+}
+
+input[type="date"]:valid::-webkit-datetime-edit-text,
+input[type="date"]:valid::-webkit-datetime-edit-month-field,
+input[type="date"]:valid::-webkit-datetime-edit-day-field,
+input[type="date"]:valid::-webkit-datetime-edit-year-field {
+    color: inherit !important;
+}
+
+/* Table header styles for maintenance dashboard */
+.thead-warning {
+    background-color: #ffc107 !important;
+    color: #212529 !important;
+}
+
+.thead-warning th {
+    background-color: #ffc107 !important;
+    color: #212529 !important;
+    border-bottom: 2px solid #ffb300 !important;
+    font-weight: 600;
+}

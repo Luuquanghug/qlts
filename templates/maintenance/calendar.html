@@ -1,0 +1,147 @@
+{% extends "layouts/base.html" %}
+
+{% block page_title %}Lịch bảo trì{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('maintenance_list') }}">Bảo trì</a></li>
+<li class="breadcrumb-item active">Lịch</li>
+{% endblock %}
+
+{% block extra_css %}
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
+<style>
+    #calendar {
+        max-width: 100%;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .fc-event {
+        cursor: pointer;
+    }
+    .fc-toolbar-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fas fa-calendar-alt mr-2"></i>Lịch bảo trì thiết bị IT</h3>
+        <div class="card-tools">
+            <a href="{{ url_for('maintenance_list') }}" class="btn btn-sm btn-secondary">
+                <i class="fas fa-list"></i> Danh sách
+            </a>
+            <a href="{{ url_for('maintenance_add') }}" class="btn btn-sm btn-primary">
+                <i class="fas fa-plus"></i> Thêm bảo trì
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    <strong>Chú thích:</strong>
+                    <span class="badge badge-danger mr-2">Đỏ</span> = Quá hạn
+                    <span class="badge badge-warning mr-2">Vàng</span> = Sắp đến hạn
+                    <span class="small text-muted">(Click vào sự kiện để xem chi tiết)</span>
+                </div>
+            </div>
+        </div>
+        <div id="calendar"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/vi.js'></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: 'vi',
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: function(info, successCallback, failureCallback) {
+            fetch('{{ url_for("maintenance_calendar_events") }}?start=' + info.startStr + '&end=' + info.endStr)
+                .then(response => response.json())
+                .then(data => {
+                    successCallback(data);
+                })
+                .catch(error => {
+                    console.error('Error loading events:', error);
+                    failureCallback(error);
+                });
+        },
+        eventClick: function(info) {
+            if (info.event.url) {
+                window.location.href = info.event.url;
+                return false;
+            }
+        },
+        eventDidMount: function(info) {
+            // Add tooltip
+            var tooltip = document.createElement('div');
+            tooltip.className = 'event-tooltip';
+            tooltip.innerHTML = '<strong>' + info.event.extendedProps.asset_name + '</strong><br>' +
+                               'Loại: ' + info.event.extendedProps.type + '<br>' +
+                               'Trạng thái: ' + info.event.extendedProps.status;
+            info.el.setAttribute('title', info.event.extendedProps.asset_name + ' - ' + info.event.extendedProps.type);
+        },
+        height: 'auto',
+        aspectRatio: 1.8
+    });
+    calendar.render();
+});
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

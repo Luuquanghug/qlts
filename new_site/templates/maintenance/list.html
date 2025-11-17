@@ -1,0 +1,25 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Bảo trì{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>Bảo trì</h4>
+  <a class="btn btn-primary" href="/maintenance/add">Thêm bảo trì</a>
+</div>
+<table class="table table-striped">
+  <thead><tr><th>ID</th><th>Tài sản</th><th>Ngày</th><th>Loại</th><th>Chi phí</th><th>Trạng thái</th></tr></thead>
+  <tbody>
+  {% for r in records.items %}
+    <tr>
+      <td>{{ r.id }}</td>
+      <td>{{ r.asset.name if r.asset else '' }}</td>
+      <td>{{ r.maintenance_date }}</td>
+      <td>{{ r.type }}</td>
+      <td>{{ r.cost }}</td>
+      <td>{{ r.status }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+
+

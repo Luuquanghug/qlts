@@ -1,0 +1,7 @@
+---
+alwaysApply: true
+---
+
+- Không được hardcode, các thuộc tínhtính css phải để trong file tương ứng.
+- Các script test phải lưu trong thư mục /test
+- Các config phải để trong file .env, không hard code.
